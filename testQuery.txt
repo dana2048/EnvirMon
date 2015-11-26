@@ -1,0 +1,48 @@
+
+SELECT * FROM
+(SELECT * FROM data ORDER BY id DESC) data2
+where sensor=1
+limit 10;
+
+
+SELECT * FROM
+(SELECT * FROM data WHERE sensor=1 ORDER BY id DESC) data2
+limit 1;
+
+
+SELECT * FROM
+(SELECT * FROM data WHERE sensor=1 ORDER BY id DESC) data2
+limit 1;
+
+
+
+select id, CAST(CAST(stamp AS DATE)-1 AS DATE) from data limit 1;
+
+
+SELECT * FROM
+(
+((SELECT * FROM data WHERE sensor=1 ORDER BY id DESC) data2)
+(SELECT * FROM data2 WHERE DATE('stamp')='2015-10-21')
+);
+
+
+SELECT * FROM
+(
+((SELECT * FROM data WHERE sensor=1 ORDER BY id DESC) data2)
+(SELECT * FROM data2 WHERE stamp='2015-10-21')
+);
+
+
+
+select * from
+(
+((select date('2015-10-22') as today) today2)
+(select * from today2)
+);
+
+
+
+select date(date('2015-10-22')-1) as yesterday;
+
+select AVG(temperature) AS yesterdayTemp, AVG(humidity) AS yesterdayHumid from data WHERE sensor=1 AND DATE(stamp)='2015-10-21';
+

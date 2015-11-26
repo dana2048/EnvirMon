@@ -1,0 +1,6 @@
+F:\EnviroMon\MySQL-Test1\Connector.NET\Samples\Async\cs\obj\Debug\Async.csprojResolveAssemblyReference.cache
+F:\EnviroMon\MySQL-Test1\Connector.NET\Samples\Async\cs\bin\Debug\Async.exe.config
+F:\EnviroMon\MySQL-Test1\Connector.NET\Samples\Async\cs\bin\Debug\Async.exe
+F:\EnviroMon\MySQL-Test1\Connector.NET\Samples\Async\cs\bin\Debug\Async.pdb
+F:\EnviroMon\MySQL-Test1\Connector.NET\Samples\Async\cs\obj\Debug\Async.exe
+F:\EnviroMon\MySQL-Test1\Connector.NET\Samples\Async\cs\obj\Debug\Async.pdb
