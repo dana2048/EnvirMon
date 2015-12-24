@@ -60,9 +60,6 @@ require_once ('jpgraph/jpgraph_line.php');
 <h2>Yesterday's Temperature Chart</h2>
 
 <?php
-// Some data
-//$ydata = array(11,3,8,12,5,1,9,13,5,7);
-//$chartFileName = sys_get_temp_dir() . '\\' . 'chartTemperature.png';
 $chartFileName = 'chartTemperature.png';
 
 // Create the graph. These two calls are always required
@@ -89,19 +86,69 @@ $graph->Add($lineplot);
 
 // Display the graph
 $graph->Stroke($chartFileName);
-//echo '<img src="' . $chartFileName . '">'
-//echo '<img src=file:///' . $chartFileName . '>';
 echo '<img src="' . $chartFileName . '">';
 ?>
 
 
-<!-- PRESSURE CHART -->
+<!-- TEMPERATURE CHART - HOURLY -->
+<h2>Yesterday's Temperature Chart</h2>
+
+<?php
+$chartFileName = 'chartTemperatureHourly.png';
+
+// Create the graph. These two calls are always required
+$graph = new Graph(1024,480,$chartFileName,100,$aInline=false);
+$graph->SetScale('textlin');
+
+//Create the linear plot
+$lineplot=new LinePlot($values['chartTemperature1-hourly']);
+$lineplot->SetColor('darkgreen');
+$lineplot->SetStyle('solid');
+
+// Add the plot to the graph
+$graph->Add($lineplot);
+
+// Display the graph
+$graph->Stroke($chartFileName);
+echo '<img src="' . $chartFileName . '">';
+?>
+
+
+<!-- TEMPERATURE CHART X 4 -->
+<h2>Yesterday's Temperature Chart X 4</h2>
+
+<?php
+$chartFileName = 'chartTemperature4.png';
+
+// Create the graph. These two calls are always required
+$graph = new Graph(1024,480,$chartFileName,100,$aInline=false);
+$graph->SetScale('textlin');
+
+$t4 = $values['chartTemperature4'];
+
+for($i=0; $i<4; $i++)
+{
+	//Create the linear plot
+	$lineplot=new LinePlot($t4[$i]);
+	$lineplot->SetColor('darkgreen');
+	$lineplot->SetStyle('dashed');
+
+	// Add the plot to the graph
+	$graph->Add($lineplot);
+}
+
+// Display the graph
+$graph->Stroke($chartFileName);
+echo '<img src="' . $chartFileName . '">';
+?>
+
+
+<!-- MONTH PRESSURE CHART -->
 <h2>This Month's Pressure Chart</h2>
 
 <?php
 $ydata = $values['chartPressure'];
 //print_r($ydata);
-$chartFileName = sys_get_temp_dir() . '\\' . 'chartPressure.png';
 $chartFileName = 'chartPressure.png';
 
 // Create the graph. These two calls are always required
@@ -119,6 +166,32 @@ $graph->Add($lineplot);
 $graph->Stroke($chartFileName);
 echo '<img src="' . $chartFileName . '">';
 ?>
+
+
+<!-- MONTH HUMIDITY CHART -->
+<h2>This Month's Humidity Chart</h2>
+
+<?php
+$ydata = $values['chartHumidity'];
+//print_r($ydata);
+$chartFileName = 'chartHumidity.png';
+
+// Create the graph. These two calls are always required
+$graph = new Graph(1024,480,$chartFileName,100,$aInline=false);
+$graph->SetScale('textlin');
+
+// Create the linear plot
+$lineplot=new LinePlot($ydata);
+$lineplot->SetColor('green');
+
+// Add the plot to the graph
+$graph->Add($lineplot);
+
+// Display the graph
+$graph->Stroke($chartFileName);
+echo '<img src="' . $chartFileName . '">';
+?>
+
 
 <!-- MONTH TEMPERATURE CHART -->
 <h2>This Month's Temperature Chart</h2>
