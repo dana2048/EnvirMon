@@ -25,18 +25,16 @@ namespace MySQL_Test1
 
         public void App()
         {
-            String comPort = ConfigurationManager.AppSettings["comPort"];
+            String serialPort = ConfigurationManager.AppSettings["serialPort"];
             SerialPort myPort = new SerialPort();
 
             myPort.DataBits = 8;
             myPort.BaudRate = 9600;
             myPort.DtrEnable = true;
-            myPort.PortName = "COM6";
+            myPort.PortName = serialPort;
             myPort.Parity = Parity.None;
             myPort.StopBits = StopBits.One;
             myPort.DataReceived += MyPortDataReceived;
-
-            myPort.Open();
 
             connect = new MySqlConnection
                 (
@@ -50,9 +48,13 @@ namespace MySQL_Test1
             try
             {
                 connect.Open();
+                myPort.Open();
 
                 Console.WriteLine("press return to quit");
                 Console.ReadLine();
+
+                myPort.Close();
+                connect.Close();
 
 /*                
                 string sql = "INSERT INTO data (sensor, pressure, humidity, temperature) VALUES (4, 30.33, 55.55, 66.6)";
