@@ -1,0 +1,8 @@
+*.png
+*.pdb
+*.suo
+*.cache
+Debug
+Temporary*
+Samples
+

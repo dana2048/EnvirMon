@@ -1,0 +1,5 @@
+SQL Query
+==========
+
+select AVG(temperature) from data where sensor=4 AND date(stamp) = '2015-12-24' AND hour(stamp) = '13';
+
