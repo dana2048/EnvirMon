@@ -9,8 +9,8 @@ require 'includes/template.php';	//template handler
 //echo '$_SERVER[TMP]=' . $_SERVER['TMP'] . '<br>';
 //echo 'sys_get_temp_dir =' . sys_get_temp_dir() . '<br>';;
 
-//########## get current temperature and humidity ##########
-$sql = 'SELECT * FROM data WHERE sensor=1 LIMIT 1';
+//###################################################
+//CURRENT TEMPERATURE AND HUMIDITY
 $sql = 
 'SELECT * FROM ' .
 '(SELECT * FROM data WHERE sensor=1 ORDER BY id DESC) data2 ' .
@@ -19,9 +19,9 @@ $sql =
 $result = $db->query($sql);
 $value = $result->fetch_array(MYSQL_ASSOC);
 
-$values['timeStamp'] = $value['stamp'];
 $values['currentTemp'] = $value['temperature'];
 $values['currentHumid'] = $value['humidity'];
+$values['timeStamp'] = $value['stamp'];
 
 //$values['currentTemp'] = 70;
 //$values['currentHumid'] = 45;
@@ -45,9 +45,53 @@ $yesterday = $value['yesterday'];
 //echo $yesterday; echo "<br>";
 ########## */
 
+$d4 = array(4);
+$t4 = array(4);
+$h4 = array(4);
+$sensor = array(1,2,4,5);
+//###################################################
+//CURRENT TEMPERATURE AND HUMIDITY X 4
+for($i=0; $i<4; $i++)
+{
+	$j = $sensor[$i];
+	$sql = 
+	"SELECT * " .
+	"FROM (SELECT * FROM data WHERE sensor=$j ORDER BY id DESC) data2 " .
+	"LIMIT 1;";
 
-//########## get average temperature and humidity for yesterday ##########
-$today = date("Y-m-d");
+	$result = $db->query($sql);
+
+//	echo '<pre>';
+	$t = array();
+	while ( $row = $result->fetch_array(MYSQL_ASSOC) ) 
+	{
+		$t = $row['temperature'];
+		$h = $row['humidity'];
+		$d = $row['stamp'];
+	}
+
+	$d4[$i] = $d;
+	$t4[$i] = $t;
+	$h4[$i] = $h;
+/*
+	echo 'print_r($row)'; echo "<br>";
+	print_r($row); echo "<br>";
+
+	echo 'print_r($t)'; echo "<br>";
+	print_r($t);
+
+	echo 'print_r($t4[$i])'; echo "<br>";
+	print_r($t4[$i]);
+	echo '</pre><hr>'; */
+}
+
+$values['currentTemps'] = $t4;
+$values['currentHumids'] = $h4;
+$values['currentTimes'] = $d4;
+
+
+//###################################################
+//YESTERDAY AVERAGE TEMPERATURE AND HUMIDITY
 $timeVal  = mktime(0, 0, 0, date("m")  , date("d")-1, date("Y"));
 $yesterday = date("Y-m-d", $timeVal);
 $thisMonth = date("m", $timeVal);
@@ -68,25 +112,6 @@ $values['yesterdayHumid'] = $value['yesterdayHumid'];
 //$a = array(11,3,8,12,5,1,9,13,5,7);
 //$values['chart'] = $a;
 
-//###################################################
-//TEMPERATURE CHART SENSOR 1
-$sql = 
-"SELECT temperature " .
-"FROM data WHERE sensor=1 AND DATE(stamp)='" . $yesterday . "'";
-
-$result = $db->query($sql);
-
-$t1 = array();
-	//echo '<pre>';
-	while ( $row = $result->fetch_array(MYSQL_ASSOC) ) 
-	{
-		$t1[] = $row['temperature'];
-			//print_r($row); echo "<br>";
-	}
-
-	//echo '</pre><hr>';
-$values['chartTemperature1'] = $t1;
-
 
 //###################################################
 //TEMPERATURE CHART SENSOR 1 - HOURLY AVERAGE
@@ -104,28 +129,7 @@ for($i=0; $i<24; $i++)
 
 $values['chartTemperature1-hourly'] = $t1;
 
-//###################################################
-//TEMPERATURE CHART SENSOR 2
-$sql = 
-"SELECT temperature " .
-"FROM data WHERE sensor=2 AND DATE(stamp)='" . $yesterday . "'";
 
-$result = $db->query($sql);
-
-$t2 = array();
-	//echo '<pre>';
-	while ( $row = $result->fetch_array(MYSQL_ASSOC) ) 
-	{
-		$t2[] = $row['temperature'];
-			//print_r($row); echo "<br>";
-	}
-
-	//echo '</pre><hr>';
-$values['chartTemperature2'] = $t2;
-
-
-$t4 = array(4);
-$sensor = array(1,2,4,5);
 //###################################################
 //TEMPERATURE CHART FOUR SENSORS
 
@@ -159,60 +163,6 @@ for($i=0; $i<4; $i++)
 }
 
 $values['chartTemperature4'] = $t4;
-
-
-//###################################################
-//MONTH PRESSURE CHART
-$sql = 
-"SELECT pressure " .
-"FROM data WHERE sensor=3 AND YEAR(stamp)='" . $thisYear . "' AND MONTH(stamp)='" . $thisMonth . "'";
-
-$result = $db->query($sql);
-
-$t = array();
-	while ( $row = $result->fetch_array(MYSQL_ASSOC) ) 
-	{
-		$t[] = $row['pressure'];
-	}
-
-$values['chartPressure'] = $t;
-
-
-//###################################################
-//MONTH HUMIDITY CHART
-$sql = 
-"SELECT humidity " .
-"FROM data WHERE sensor=1 AND YEAR(stamp)='" . $thisYear . "' AND MONTH(stamp)='" . $thisMonth . "'";
-
-$result = $db->query($sql);
-
-$t = array();
-	while ( $row = $result->fetch_array(MYSQL_ASSOC) ) 
-	{
-		$t[] = $row['humidity'];
-	}
-
-$values['chartHumidity'] = $t;
-
-
-//###################################################
-//MONTH TEMPERATURE CHART
-$sql = 
-"SELECT temperature " .
-"FROM data WHERE sensor=1 AND YEAR(stamp)='" . $thisYear . "' AND MONTH(stamp)='" . $thisMonth . "'";
-
-$result = $db->query($sql);
-
-$t = array();
-	//echo '<pre>';
-	while ( $row = $result->fetch_array(MYSQL_ASSOC) ) 
-	{
-		$t[] = $row['temperature'];
-			//print_r($row); echo "<br>";
-	}
-
-	//echo '</pre><hr>';
-$values['chartMonthTemperature'] = $t;
 
 
 //PASS VALUES TO TEMPLATE FOR DISPLAY

@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.IO.Ports;
+using System.Configuration;
 using MySql.Data.MySqlClient;
 
 namespace MySQL_Test1
@@ -24,7 +25,7 @@ namespace MySQL_Test1
 
         public void App()
         {
-
+            String comPort = ConfigurationManager.AppSettings["comPort"];
             SerialPort myPort = new SerialPort();
 
             myPort.DataBits = 8;

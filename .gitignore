@@ -1,1 +1,13 @@
 *.png
+*.cache
+TemporaryGeneratedFile*.cs
+MySQL-Test1/*.*
+MySQL-Test1/*/*.*
+MySQL-Test1/*/*/*.*
+MySQL-Test1/*/*/*/*.*
+MySQL-Test2/*.*
+MySQL-Test2/*/*.*
+MySQL-Test2/*/*/*.*
+MySQL-Test2/*/*/*/*.*
+MySQL-Test1/MySQL-Test1/Program.cs
+MySQL-Test1\MySQL-Test1\Program.cs
