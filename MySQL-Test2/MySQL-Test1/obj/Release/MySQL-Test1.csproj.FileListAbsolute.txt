@@ -1,0 +1,6 @@
+G:\xampp\htdocs\EnviroMon\MySQL-Test1\MySQL-Test1\bin\Release\MySQL-Test1.exe.config
+G:\xampp\htdocs\EnviroMon\MySQL-Test1\MySQL-Test1\bin\Release\MySQL-Test1.exe
+G:\xampp\htdocs\EnviroMon\MySQL-Test1\MySQL-Test1\bin\Release\MySQL-Test1.pdb
+G:\xampp\htdocs\EnviroMon\MySQL-Test1\MySQL-Test1\obj\Release\MySQL-Test1.exe
+G:\xampp\htdocs\EnviroMon\MySQL-Test1\MySQL-Test1\obj\Release\MySQL-Test1.pdb
+G:\xampp\htdocs\EnviroMon\MySQL-Test1\MySQL-Test1\obj\Release\MySQL-Test1.csprojResolveAssemblyReference.cache
