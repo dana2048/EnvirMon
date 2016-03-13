@@ -1,6 +1,11 @@
 *.png
 *.cache
-TemporaryGeneratedFile*.cs
+*.pdb
+*.suo
+*.cache
+Debug
+Samples
+Temporary*
 MySQL-Test1/*.*
 MySQL-Test1/*/*.*
 MySQL-Test1/*/*/*.*
@@ -11,3 +16,4 @@ MySQL-Test2/*/*/*.*
 MySQL-Test2/*/*/*/*.*
 MySQL-Test1/MySQL-Test1/Program.cs
 MySQL-Test1\MySQL-Test1\Program.cs
+MySQL-Test1/MySQL-Test1.v11.suo
