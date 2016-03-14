@@ -5,18 +5,6 @@
 require_once ('jpgraph/jpgraph.php');
 require_once ('jpgraph/jpgraph_line.php');
 
-//echo 'USE_CACHE =';
-//print_r(USE_CACHE);
-//echo '<br>';
-
-//echo 'CACHE_DIR =';
-//print_r(CACHE_DIR);
-//echo '<br>';
-
-//echo 'values =';
-//print_r($values);
-//echo '<br>';
-
 ?>
 
 <!-- CURRENT CONDITIONS -->
@@ -32,11 +20,6 @@ require_once ('jpgraph/jpgraph_line.php');
 		</tr>
 	</thead>
 	<tbody>
-		<!-- tr>
-			<td><?= $values['timeStamp'] ?></td>
-			<td><?= number_format($values['currentTemp'],1) ?></td>
-			<td><?= number_format($values['currentHumid'],1) ?></td>
-		</tr -->
 		<tr>
 			<td><?= $values['currentTimes'][0] ?></td>
 			<td> </td>
@@ -64,46 +47,30 @@ require_once ('jpgraph/jpgraph_line.php');
 	</tbody>
 </table>
 
-<!-- YESTERDAY'S AVERAGE CONDITIONS -->
-<h2>Yesterday's Average Conditions</h2>
-<table class="table table-striped">
-	<thead>
-		<tr>
-			<th>Date</th>
-			<th></th>
-			<th>Temperature</th>
-			<th>Humidity</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td><?= $values['yesterdayDate'] ?></td>
-			<td></td>
-			<td><?= number_format($values['yesterdayTemp'],1) ?></td>
-			<td><?= number_format($values['yesterdayHumid'],1) ?></td>
-		</tr>
-	</tbody>
-</table>
-
-
-<!-- TEMPERATURE CHART 
-<h2>Yesterday's Temperature Chart</h2>
-
-
 <!-- TEMPERATURE CHART - HOURLY -->
-<h2>Yesterday's Temperature Chart</h2>
+<h2>Hourly Average Temperature</h2>
 
 <?php
 $chartFileName = 'chartTemperatureHourly.png';
 
 // Create the graph. These two calls are always required
 $graph = new Graph(1024,480,$chartFileName,100,$aInline=false);
-$graph->SetScale('textlin');
+//$graph->SetScale('textlin');
+$graph->SetScale('intlin',0,0,0,23);
+$graph->SetMargin(20,10,10,20);
 
-//Create the linear plot
+//xData = hour values displayed on X axis
+//Create the linear plot -- INDOOR
 $lineplot=new LinePlot($values['chartTemperature1-hourly']);
-$lineplot->SetColor('darkgreen');
+$lineplot->SetColor('red');
+$lineplot->SetStyle('solid');
+
+// Add the plot to the graph
+$graph->Add($lineplot);
+
+//Create the linear plot -- OUTDOOR
+$lineplot=new LinePlot($values['chartTemperature4-hourly']);
+$lineplot->SetColor('green');
 $lineplot->SetStyle('solid');
 
 // Add the plot to the graph
@@ -115,30 +82,3 @@ echo '<img src="' . $chartFileName . '">';
 ?>
 
 
-<!-- TEMPERATURE CHART X 4 -->
-<h2>Yesterday's Temperature Chart X 4</h2>
-
-<?php
-$chartFileName = 'chartTemperature4.png';
-
-// Create the graph. These two calls are always required
-$graph = new Graph(1024,480,$chartFileName,100,$aInline=false);
-$graph->SetScale('textlin');
-
-$t4 = $values['chartTemperature4'];
-
-for($i=0; $i<4; $i++)
-{
-	//Create the linear plot
-	$lineplot=new LinePlot($t4[$i]);
-	$lineplot->SetColor('darkgreen');
-	$lineplot->SetStyle('dashed');
-
-	// Add the plot to the graph
-	$graph->Add($lineplot);
-}
-
-// Display the graph
-$graph->Stroke($chartFileName);
-echo '<img src="' . $chartFileName . '">';
-?>

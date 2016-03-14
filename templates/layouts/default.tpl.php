@@ -37,8 +37,11 @@
 					<a class="navbar-brand" href="index.php">EnviroMon</a>
 				</div>
 				<div class="navbar-collapse">
+					<ul class="nav navbar-nav navbar-left">
+						<li><a href="Yesterday.php">Yesterday</a>
+						<li><a href="Monthly.php">This Month</a>
+					</ul>
 					<ul class="nav navbar-nav navbar-right">
-						<li><a href="Monthly.php">Monthly</a>
 						<li><a href="about.php">About</a>
 						<li><a href="contact.php">Contact</a></li>
 						<li><a href="admin.php">Admin</a></li>
