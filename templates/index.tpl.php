@@ -7,63 +7,63 @@ require_once ('jpgraph/jpgraph_line.php');
 
 ?>
 
+
 <!-- CURRENT CONDITIONS -->
-<h2>Current Conditions</h2>
+<h3>Current Conditions</h3>
 <table class="table table-striped">
 	<thead>
 		<tr>
 			<th>Time</th>
-			<th> </th>
+			<th>Location</th>
 			<th>Temperature</th>
 			<th>Humidity</th>
 			<th></th>
 		</tr>
 	</thead>
 	<tbody>
-		<tr>
-			<td><?= $values['currentTimes'][0] ?></td>
-			<td> </td>
-			<td><?= number_format($values['currentTemps'][0],1) ?></td>
-			<td><?= number_format($values['currentHumids'][0],1) ?></td>
-		</tr>
-		<tr>
-			<td><?= $values['currentTimes'][1] ?></td>
-			<td> </td>
-			<td><?= number_format($values['currentTemps'][1],1) ?></td>
-			<td><?= number_format($values['currentHumids'][1],1) ?></td>
-		</tr>
-		<tr>
-			<td><?= $values['currentTimes'][2] ?></td>
-			<td> </td>
-			<td><?= number_format($values['currentTemps'][2],1) ?></td>
-			<td><?= number_format($values['currentHumids'][2],1) ?></td>
-		</tr>
-		<tr>
-			<td><?= $values['currentTimes'][3] ?></td>
-			<td> </td>
-			<td><?= number_format($values['currentTemps'][3],1) ?></td>
-			<td><?= number_format($values['currentHumids'][3],1) ?></td>
-		</tr>
+		<?php
+		for($i=0; $i<4; $i++)
+		{
+			echo('<tr>');
+			echo('<td>' . $values['currentTimes'][$i] . '</td>');
+			echo('<td>' . $values['location'][$i] . '</td>');
+			echo('<td>' . number_format($values['currentTemps'][$i],1) . '</td>');
+			echo('<td>' . number_format($values['currentHumids'][$i],1) . '</td>');
+			echo('</tr>');
+		}
+		?>
 	</tbody>
 </table>
 
+
 <!-- TEMPERATURE CHART - HOURLY -->
-<h2>Hourly Average Temperature</h2>
+<h3>Today's Hourly Average Temperature</h3>
 
 <?php
 $chartFileName = 'chartTemperatureHourly.png';
 
-// Create the graph. These two calls are always required
+// Create the graph
 $graph = new Graph(1024,480,$chartFileName,100,$aInline=false);
 //$graph->SetScale('textlin');
 $graph->SetScale('intlin',0,0,0,23);
-$graph->SetMargin(20,10,10,20);
+$graph->SetMargin(50,10,10,0);
+//$graph->SetShadow();	//true,2,array(192,192,192));
 
-//xData = hour values displayed on X axis
+// LEGEND
+$graph->legend->SetPos(0.02, 0.08, 'right', 'bottom');
+$graph->legend->SetShadow('gray@0.2',2);
+$graph->legend->SetFont(FF_ARIAL, FS_NORMAL, 10);
+
+// AXES
+$graph->xaxis->SetTitle('Time Of Day', 'middle');
+$graph->yaxis->SetTitle('Degrees Fahrenheit', 'middle');
+$graph->yaxis->SetTitleMargin(30);
+
 //Create the linear plot -- INDOOR
 $lineplot=new LinePlot($values['chartTemperature1-hourly']);
 $lineplot->SetColor('red');
 $lineplot->SetStyle('solid');
+$lineplot->SetLegend('Indoor');
 
 // Add the plot to the graph
 $graph->Add($lineplot);
@@ -72,6 +72,7 @@ $graph->Add($lineplot);
 $lineplot=new LinePlot($values['chartTemperature4-hourly']);
 $lineplot->SetColor('green');
 $lineplot->SetStyle('solid');
+$lineplot->SetLegend('Outdoor');
 
 // Add the plot to the graph
 $graph->Add($lineplot);
@@ -82,3 +83,47 @@ echo '<img src="' . $chartFileName . '">';
 ?>
 
 
+<!-- HUMIDITY CHART - HOURLY -->
+<h3>Today's Hourly Average Humidity</h3>
+
+<?php
+$chartFileName = 'chartHumidityHourly.png';
+
+// Create the graph. These two calls are always required
+$graph = new Graph(1024,480,$chartFileName,100,$aInline=false);
+//$graph->SetScale('textlin');
+$graph->SetScale('intlin',0,0,0,23);
+$graph->SetMargin(50,10,10,0);
+
+//xData = hour values displayed on X axis
+//Create the linear plot -- INDOOR
+$lineplot=new LinePlot($values['chartHumidity1-hourly']);
+$lineplot->SetColor('red');
+$lineplot->SetStyle('solid');
+$lineplot->SetLegend('Indoor');
+
+// Add the plot to the graph
+$graph->Add($lineplot);
+
+//Create the linear plot -- OUTDOOR
+$lineplot=new LinePlot($values['chartHumidity4-hourly']);
+$lineplot->SetColor('green');
+$lineplot->SetStyle('solid');
+$lineplot->SetLegend('Outdoor');
+
+// Add the plot to the graph
+$graph->Add($lineplot);
+$graph->legend->SetPos(0.02, 0.08, 'right', 'bottom');
+$graph->legend->SetShadow('gray@0.2',2);
+$graph->legend->SetFont(FF_ARIAL, FS_NORMAL, 10);
+$graph->xaxis->SetTitle('Time Of Day', 'middle');
+$graph->yaxis->SetTitle('Percent', 'middle');
+$graph->yaxis->SetTitleMargin(30);
+
+// Display the graph
+$graph->Stroke($chartFileName);
+echo '<img src="' . $chartFileName . '">';
+?>
+
+<!-- some blank space at the bottom -->
+<br><br>
