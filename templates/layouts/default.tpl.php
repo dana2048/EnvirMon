@@ -37,18 +37,25 @@
 					<a class="navbar-brand" href="index.php">EnviroMon</a>
 				</div>
 				<div class="navbar-collapse">
+					<ul class="nav navbar-nav navbar-left">
+						<li><a href="Index.php">Today</a>
+						<li><a href="day7.php">7-day</a>
+						<li><a href="Yesterday.php">Yesterday</a>
+						<li><a href="Monthly.php">This Month</a>
+						<li><a href="Other.php">Other</a>
+					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="about.php">About</a>
 						<li><a href="contact.php">Contact</a></li>
-						<li><a href="admin.php">Contact</a></li>
+						<li><a href="admin.php">Admin</a></li>
 					</ul>
 				</div>
 			</div>
 		</nav>
 		
 		<div class="container">
-			<div class="page-header">
-				<h1 class="page-title">
+			<!-- div class="page-header">
+				<h2 class="page-title">
 					<?php /* If a $page_title is available, use that in the header */ ?>
 					<?php if ( isset($page_title) ): ?>
 						<?php echo $page_title; ?>
@@ -56,8 +63,8 @@
 					<?php else: ?>
 						EnviroMon- Environment Monitor
 					<?php endif; ?>
-				</h1>
-			</div>
+				</h2>
+			</div -->
 
 			<?= $page_content ?>
 

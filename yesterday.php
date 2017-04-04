@@ -1,5 +1,5 @@
 
-<!--- EnviroMon Index Page --->
+<!--- EnviroMon Yesterday Page --->
 
 <?php
 
@@ -17,8 +17,11 @@ $h4 = array(4);
 $sensor = array(1,5,4,6,3);
 $location = array('indoor DHT22', 'indoor AM2302', 'outdoor AM2302', 'crawl space');
 
-$timeVal  = mktime(0, 0, 0, date("m")  , date("d")-3, date("Y"));
-$today = date("Y-m-d", $timeVal);
+$timeVal  = mktime(0, 0, 0, date("m")  , date("d")-1, date("Y"));
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+$timeVal  = mktime(0, 0, 0, date("m")  , date("d")-2, date("Y")); 
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+$yesterday = date("Y-m-d", $timeVal);
 $qYear = date("Y", $timeVal);
 $qMonth = date("m", $timeVal);
 $qDay = date("d", $timeVal);
@@ -43,32 +46,25 @@ function toc()
 tic(); //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 //###################################################
-//CURRENT TEMPERATURE AND HUMIDITY X 4
+//YESTERDAY AVERAGE TEMPERATURE AND HUMIDITY X 4
 for($i=0; $i<4; $i++)
 {
 	$j = $sensor[$i];
-	// $sql = 
-	// "SELECT * " .
-	// "FROM (SELECT * FROM data WHERE sensor=$j ORDER BY id DESC) data2 " .
-	// "LIMIT 1;";
-
 	$sql = 
-	"SELECT stamp, temperature, humidity " .
+	"SELECT AVG(temperature) AS yesterdayTemp, AVG(humidity) AS yesterdayHumid " .
+//	"FROM data WHERE sensor=$j AND DATE(stamp)='" . $yesterday . "'";
 	"FROM data WHERE sensor=$j
 		AND year ='" . $qYear . "' 
 		AND month ='" . $qMonth . "' 
-		AND day ='" . $qDay . "'
- 		ORDER BY id DESC LIMIT 1";
+		AND day ='" . $qDay . "'";
 
 	$result = $db->query($sql);
 
-	$t = array();
-	//get the last value
 	while ( $row = $result->fetch_array(MYSQL_ASSOC) ) 
 	{
-		$d = $row['stamp'];
-		$t = $row['temperature'];
-		$h = $row['humidity'];
+		$d = $yesterday;
+		$t = $row['yesterdayTemp'];
+		$h = $row['yesterdayHumid'];
 	}
 
 	$d4[$i] = $d;
@@ -76,9 +72,9 @@ for($i=0; $i<4; $i++)
 	$h4[$i] = $h;
 }
 
-$values['currentTimes'] = $d4;
-$values['currentTemps'] = $t4;
-$values['currentHumids'] = $h4;
+$values['yesterdayTimes'] = $d4;
+$values['yesterdayTemps'] = $t4;
+$values['yesterdayHumids'] = $h4;
 $values['location'] = $location;
 
 
@@ -95,13 +91,12 @@ for($i=0; $i<24; $i++)
 			AND month ='" . $qMonth . "' 
 			AND day ='" . $qDay . "' 
 			AND hour ='" . $i . "'";
-		// "FROM data WHERE sensor=$j AND date(stamp) ='" . $today . "' AND hour(stamp) ='" . $i . "'";
+		// "FROM data WHERE sensor=$j AND date(stamp) ='" . $yesterday . "' AND hour(stamp) ='" . $i . "'";
 
 	$result = $db->query($sql);
 	$value = $result->fetch_array(MYSQL_ASSOC);
 	$t1[] = $value['avgTemp'];
 }
-
 $values['chartTemperatureIn-hourly'] = $t1;
 
 
@@ -118,7 +113,7 @@ for($i=0; $i<24; $i++)
 			AND month ='" . $qMonth . "' 
 			AND day ='" . $qDay . "' 
 			AND hour ='" . $i . "'";
-		// "FROM data WHERE sensor=$j AND date(stamp) ='" . $today . "' AND hour(stamp) ='" . $i . "'";
+		// "FROM data WHERE sensor=$j AND date(stamp) ='" . $yesterday . "' AND hour(stamp) ='" . $i . "'";
 
 	$result = $db->query($sql);
 	$value = $result->fetch_array(MYSQL_ASSOC);
@@ -246,7 +241,7 @@ $values['chartPressure-hourly'] = $t1;
 //###################################################
 //PASS VALUES TO TEMPLATE FOR DISPLAY
 //new instance of template handler for INDEX template
-$tpl = new Template('index');
+$tpl = new Template('yesterday');
 
 //pass these variables to our template
 $tpl->vars = array(

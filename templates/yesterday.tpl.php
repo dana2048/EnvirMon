@@ -1,5 +1,5 @@
 
-<!-- INDEX TEMPLATE -->
+<!-- Yesterday TEMPLATE -->
 
 <?php
 require_once ('jpgraph/jpgraph.php');
@@ -8,12 +8,12 @@ require_once ('jpgraph/jpgraph_line.php');
 ?>
 
 
-<!-- CURRENT CONDITIONS -->
-<h3>Current Conditions</h3>
+<!-- YESTERDAY'S AVERAGE CONDITIONS -->
+<h3>Yesterday's Average Conditions</h3>
 <table class="table table-striped">
 	<thead>
 		<tr>
-			<th>Time</th>
+			<th>Date</th>
 			<th>Location</th>
 			<th>Temperature</th>
 			<th>Humidity</th>
@@ -22,14 +22,16 @@ require_once ('jpgraph/jpgraph_line.php');
 	</thead>
 	<tbody>
 		<?php
+		//$i=0; //indoor
 		for($i=0; $i<4; $i++)
 		{
 			echo('<tr>');
-			echo('<td>' . $values['currentTimes'][$i] . '</td>');
+			echo('<td>' . $values['yesterdayTimes'][$i] . '</td>');
 			echo('<td>' . $values['location'][$i] . '</td>');
-			echo('<td>' . number_format($values['currentTemps'][$i],1) . '</td>');
-			echo('<td>' . number_format($values['currentHumids'][$i],1) . '</td>');
+			echo('<td>' . number_format($values['yesterdayTemps'][$i],1) . '</td>');
+			echo('<td>' . number_format($values['yesterdayHumids'][$i],1) . '</td>');
 			echo('</tr>');
+			//$i=2; //outdoor
 		}
 		?>
 	</tbody>
@@ -37,17 +39,15 @@ require_once ('jpgraph/jpgraph_line.php');
 
 
 <!-- TEMPERATURE CHART - HOURLY -->
-<h3>Today's Hourly Average Temperature</h3>
+<h3>Yesterday's Hourly Average Temperature</h3>
 
 <?php
 $chartFileName = 'chartTemperatureHourly.png';
 
 // Create the graph
 $graph = new Graph(1024,480,$chartFileName,100,$aInline=false);
-//$graph->SetScale('textlin');
 $graph->SetScale('intlin',0,0,0,23);
 $graph->SetMargin(50,10,10,0);
-//$graph->SetShadow();	//true,2,array(192,192,192));
 
 // LEGEND
 $graph->legend->SetPos(0.02, 0.08, 'right', 'bottom');
@@ -93,7 +93,7 @@ echo '<img src="' . $chartFileName . '">';
 
 
 <!-- HUMIDITY CHART - HOURLY -->
-<h3>Today's Hourly Average Humidity</h3>
+<h3>Yesterday's Hourly Average Humidity</h3>
 
 <?php
 $chartFileName = 'chartHumidityHourly.png';
@@ -145,8 +145,9 @@ $graph->Stroke($chartFileName);
 echo '<img src="' . $chartFileName . '">';
 ?>
 
+
 <!-- PRESSURE CHART - HOURLY -->
-<h3>Today's Hourly Average Barometric Pressure</h3>
+<h3>Yesterday's Hourly Average Pressure</h3>
 
 <?php
 $chartFileName = 'chartPressureHourly.png';
