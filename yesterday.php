@@ -6,17 +6,44 @@
 require 'includes/db.php';	//database access
 require 'includes/template.php';	//template handler
 
+$indoorSensIndex = 1;
+$outdoorSensIndex = 2;
+$crawlSensIndex = 3;
+$pressSensIndex = 4;
+
 $d4 = array(4);
 $t4 = array(4);
 $h4 = array(4);
-$sensor = array(1,2,4,5);
-$location = array('indoor', 'indoor', 'outdoor', 'indoor');
+$sensor = array(1,5,4,6,3);
+$location = array('indoor DHT22', 'indoor AM2302', 'outdoor AM2302', 'crawl space');
 
 $timeVal  = mktime(0, 0, 0, date("m")  , date("d")-1, date("Y"));
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+$timeVal  = mktime(0, 0, 0, date("m")  , date("d")-2, date("Y")); 
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 $yesterday = date("Y-m-d", $timeVal);
-$thisMonth = date("m", $timeVal);
-$thisYear = date("Y", $timeVal);
+$qYear = date("Y", $timeVal);
+$qMonth = date("m", $timeVal);
+$qDay = date("d", $timeVal);
 
+$ticTime = time();
+function tic()
+{
+	global $ticTime;
+	$ticTime = time();
+	echo "<br>tic";
+}
+
+function toc()
+{
+	global $ticTime;
+	$tocTime = time();
+	echo "<br>toc ";
+	echo $tocTime-$ticTime;
+	echo "<br>";
+}
+
+tic(); //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 //###################################################
 //YESTERDAY AVERAGE TEMPERATURE AND HUMIDITY X 4
@@ -25,16 +52,14 @@ for($i=0; $i<4; $i++)
 	$j = $sensor[$i];
 	$sql = 
 	"SELECT AVG(temperature) AS yesterdayTemp, AVG(humidity) AS yesterdayHumid " .
-	"FROM data WHERE sensor=$j AND DATE(stamp)='" . $yesterday . "'";
+//	"FROM data WHERE sensor=$j AND DATE(stamp)='" . $yesterday . "'";
+	"FROM data WHERE sensor=$j
+		AND year ='" . $qYear . "' 
+		AND month ='" . $qMonth . "' 
+		AND day ='" . $qDay . "'";
 
 	$result = $db->query($sql);
 
-/*	echo '<pre>';
-	echo 'print_r($result)'; echo "<br>";
-	print_r($result); echo "<br>";
-	echo '</pre><hr>';
-*/
-	$t = array();
 	while ( $row = $result->fetch_array(MYSQL_ASSOC) ) 
 	{
 		$d = $yesterday;
@@ -53,86 +78,164 @@ $values['yesterdayHumids'] = $h4;
 $values['location'] = $location;
 
 
-
-
-/*$sql = 
-"SELECT AVG(temperature) AS yesterdayTemp, AVG(humidity) AS yesterdayHumid " .
-"FROM data WHERE sensor=1 AND DATE(stamp)='" . $yesterday . "'";
-
-$result = $db->query($sql);
-$value = $result->fetch_array(MYSQL_ASSOC);
-
-$values['yesterdayDate'] = $yesterday;
-$values['yesterdayTemp'] = $value['yesterdayTemp'];
-$values['yesterdayHumid'] = $value['yesterdayHumid'];
-*/
-
 //###################################################
-//TEMPERATURE CHART SENSOR 1 (indoor) - HOURLY AVERAGE
+//TEMPERATURE CHART INDOOR - HOURLY AVERAGE
 $t1 = array();
+$j = $sensor[$indoorSensIndex];
 for($i=0; $i<24; $i++)
 {
 	$sql =
 		"SELECT AVG(temperature) AS avgTemp " .
-		"FROM data WHERE sensor=1 AND date(stamp) ='" . $yesterday . "' AND hour(stamp) ='" . $i . "'";
+		"FROM data WHERE sensor=$j 
+			AND year ='" . $qYear . "' 
+			AND month ='" . $qMonth . "' 
+			AND day ='" . $qDay . "' 
+			AND hour ='" . $i . "'";
+		// "FROM data WHERE sensor=$j AND date(stamp) ='" . $yesterday . "' AND hour(stamp) ='" . $i . "'";
+
+	$result = $db->query($sql);
+	$value = $result->fetch_array(MYSQL_ASSOC);
+	$t1[] = $value['avgTemp'];
+}
+$values['chartTemperatureIn-hourly'] = $t1;
+
+
+//###################################################
+//TEMPERATURE CHART OUTDOOR - HOURLY AVERAGE
+$t1 = array();
+$j = $sensor[$outdoorSensIndex];
+for($i=0; $i<24; $i++)
+{
+	$sql =
+		"SELECT AVG(temperature) AS avgTemp " .
+		"FROM data WHERE sensor=$j 
+			AND year ='" . $qYear . "' 
+			AND month ='" . $qMonth . "' 
+			AND day ='" . $qDay . "' 
+			AND hour ='" . $i . "'";
+		// "FROM data WHERE sensor=$j AND date(stamp) ='" . $yesterday . "' AND hour(stamp) ='" . $i . "'";
 
 	$result = $db->query($sql);
 	$value = $result->fetch_array(MYSQL_ASSOC);
 	$t1[] = $value['avgTemp'];
 }
 
-$values['chartTemperature1-hourly'] = $t1;
+$values['chartTemperatureOut-hourly'] = $t1;
 
 
 //###################################################
-//TEMPERATURE CHART SENSOR 4 (outdoor) - HOURLY AVERAGE
+//TEMPERATURE CHART CRAWL SPACE - HOURLY AVERAGE
 $t1 = array();
+$j = $sensor[$crawlSensIndex];
 for($i=0; $i<24; $i++)
 {
 	$sql =
 		"SELECT AVG(temperature) AS avgTemp " .
-		"FROM data WHERE sensor=4 AND date(stamp) ='" . $yesterday . "' AND hour(stamp) ='" . $i . "'";
+		"FROM data WHERE sensor=$j 
+			AND year ='" . $qYear . "' 
+			AND month ='" . $qMonth . "' 
+			AND day ='" . $qDay . "' 
+			AND hour ='" . $i . "'";
+		// "FROM data WHERE sensor=$j AND date(stamp) ='" . $yesterday . "' AND hour(stamp) ='" . $i . "'";
 
 	$result = $db->query($sql);
 	$value = $result->fetch_array(MYSQL_ASSOC);
 	$t1[] = $value['avgTemp'];
 }
 
-$values['chartTemperature4-hourly'] = $t1;
+$values['chartTemperatureCrawl-hourly'] = $t1;
 
 
 //###################################################
-//HUMIDITY CHART SENSOR 1 (indoor) - HOURLY AVERAGE
+//HUMIDITY CHART INDOOR - HOURLY AVERAGE
 $t1 = array();
+$j = $sensor[$indoorSensIndex];
 for($i=0; $i<24; $i++)
 {
 	$sql =
 		"SELECT AVG(humidity) AS avgValue " .
-		"FROM data WHERE sensor=1 AND date(stamp) ='" . $yesterday . "' AND hour(stamp) ='" . $i . "'";
+		"FROM data WHERE sensor=$j 
+			AND year ='" . $qYear . "' 
+			AND month ='" . $qMonth . "' 
+			AND day ='" . $qDay . "' 
+			AND hour ='" . $i . "'";
+		// "FROM data WHERE sensor=$j AND date(stamp) ='" . $yesterday . "' AND hour(stamp) ='" . $i . "'";
 
 	$result = $db->query($sql);
 	$value = $result->fetch_array(MYSQL_ASSOC);
 	$t1[] = $value['avgValue'];
 }
 
-$values['chartHumidity1-hourly'] = $t1;
+$values['chartHumidityIn-hourly'] = $t1;
 
 
 //###################################################
-//HUMIDITY CHART SENSOR 4 (outdoor) - HOURLY AVERAGE
+//HUMIDITY CHART OUTDOOR - HOURLY AVERAGE
 $t1 = array();
+$j = $sensor[$outdoorSensIndex];
 for($i=0; $i<24; $i++)
 {
 	$sql =
 		"SELECT AVG(humidity) AS avgValue " .
-		"FROM data WHERE sensor=4 AND date(stamp) ='" . $yesterday . "' AND hour(stamp) ='" . $i . "'";
+		"FROM data WHERE sensor=$j 
+			AND year ='" . $qYear . "' 
+			AND month ='" . $qMonth . "' 
+			AND day ='" . $qDay . "' 
+			AND hour ='" . $i . "'";
+		// "FROM data WHERE sensor=$j AND date(stamp) ='" . $yesterday . "' AND hour(stamp) ='" . $i . "'";
 
 	$result = $db->query($sql);
 	$value = $result->fetch_array(MYSQL_ASSOC);
 	$t1[] = $value['avgValue'];
 }
 
-$values['chartHumidity4-hourly'] = $t1;
+$values['chartHumidityOut-hourly'] = $t1;
+
+
+//###################################################
+//HUMIDITY CHART CRAWL SPACE - HOURLY AVERAGE
+$t1 = array();
+$j = $sensor[$crawlSensIndex];
+for($i=0; $i<24; $i++)
+{
+	$sql =
+		"SELECT AVG(humidity) AS avgValue " .
+		"FROM data WHERE sensor=$j 
+			AND year ='" . $qYear . "' 
+			AND month ='" . $qMonth . "' 
+			AND day ='" . $qDay . "' 
+			AND hour ='" . $i . "'";
+		// "FROM data WHERE sensor=$j AND date(stamp) ='" . $yesterday . "' AND hour(stamp) ='" . $i . "'";
+
+	$result = $db->query($sql);
+	$value = $result->fetch_array(MYSQL_ASSOC);
+	$t1[] = $value['avgValue'];
+}
+
+$values['chartHumidityCrawl-hourly'] = $t1;
+
+
+//###################################################
+//PRESSURE CHART - HOURLY AVERAGE
+$t1 = array();
+$j = $sensor[$pressSensIndex];
+for($i=0; $i<24; $i++)
+{
+	$sql =
+		"SELECT AVG(pressure) AS avgValue " .
+		"FROM data WHERE sensor=$j 
+			AND year ='" . $qYear . "' 
+			AND month ='" . $qMonth . "' 
+			AND day ='" . $qDay . "' 
+			AND hour ='" . $i . "'";
+		// "FROM data WHERE sensor=$j AND date(stamp) ='" . $yesterday . "' AND hour(stamp) ='" . $i . "'";
+
+	$result = $db->query($sql);
+	$value = $result->fetch_array(MYSQL_ASSOC);
+	$t1[] = $value['avgValue'];
+}
+
+$values['chartPressure-hourly'] = $t1;
 
 
 //###################################################
@@ -147,5 +250,7 @@ $tpl->vars = array(
 
 //compile and print template
 $tpl->render();
+
+toc(); //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 ?>

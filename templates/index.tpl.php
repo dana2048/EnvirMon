@@ -60,7 +60,7 @@ $graph->yaxis->SetTitle('Degrees Fahrenheit', 'middle');
 $graph->yaxis->SetTitleMargin(30);
 
 //Create the linear plot -- INDOOR
-$lineplot=new LinePlot($values['chartTemperature1-hourly']);
+$lineplot=new LinePlot($values['chartTemperatureIn-hourly']);
 $lineplot->SetColor('red');
 $lineplot->SetStyle('solid');
 $lineplot->SetLegend('Indoor');
@@ -69,10 +69,19 @@ $lineplot->SetLegend('Indoor');
 $graph->Add($lineplot);
 
 //Create the linear plot -- OUTDOOR
-$lineplot=new LinePlot($values['chartTemperature4-hourly']);
+$lineplot=new LinePlot($values['chartTemperatureOut-hourly']);
 $lineplot->SetColor('green');
 $lineplot->SetStyle('solid');
 $lineplot->SetLegend('Outdoor');
+
+// Add the plot to the graph
+$graph->Add($lineplot);
+
+//Create the linear plot -- CRAWL SPACE
+$lineplot=new LinePlot($values['chartTemperatureCrawl-hourly']);
+$lineplot->SetColor('blue');
+$lineplot->SetStyle('solid');
+$lineplot->SetLegend('Crawl Space');
 
 // Add the plot to the graph
 $graph->Add($lineplot);
@@ -89,15 +98,23 @@ echo '<img src="' . $chartFileName . '">';
 <?php
 $chartFileName = 'chartHumidityHourly.png';
 
-// Create the graph. These two calls are always required
+// Create the graph
 $graph = new Graph(1024,480,$chartFileName,100,$aInline=false);
-//$graph->SetScale('textlin');
 $graph->SetScale('intlin',0,0,0,23);
 $graph->SetMargin(50,10,10,0);
 
-//xData = hour values displayed on X axis
+// LEGEND
+$graph->legend->SetPos(0.02, 0.08, 'right', 'bottom');
+$graph->legend->SetShadow('gray@0.2',2);
+$graph->legend->SetFont(FF_ARIAL, FS_NORMAL, 10);
+
+// AXES
+$graph->xaxis->SetTitle('Time Of Day', 'middle');
+$graph->yaxis->SetTitle('Percent', 'middle');
+$graph->yaxis->SetTitleMargin(30);
+
 //Create the linear plot -- INDOOR
-$lineplot=new LinePlot($values['chartHumidity1-hourly']);
+$lineplot=new LinePlot($values['chartHumidityIn-hourly']);
 $lineplot->SetColor('red');
 $lineplot->SetStyle('solid');
 $lineplot->SetLegend('Indoor');
@@ -106,19 +123,51 @@ $lineplot->SetLegend('Indoor');
 $graph->Add($lineplot);
 
 //Create the linear plot -- OUTDOOR
-$lineplot=new LinePlot($values['chartHumidity4-hourly']);
+$lineplot=new LinePlot($values['chartHumidityOut-hourly']);
 $lineplot->SetColor('green');
 $lineplot->SetStyle('solid');
 $lineplot->SetLegend('Outdoor');
 
 // Add the plot to the graph
 $graph->Add($lineplot);
-$graph->legend->SetPos(0.02, 0.08, 'right', 'bottom');
-$graph->legend->SetShadow('gray@0.2',2);
-$graph->legend->SetFont(FF_ARIAL, FS_NORMAL, 10);
+
+//Create the linear plot -- CRAWL SPACE
+$lineplot=new LinePlot($values['chartHumidityCrawl-hourly']);
+$lineplot->SetColor('blue');
+$lineplot->SetStyle('solid');
+$lineplot->SetLegend('Crawl Space');
+
+// Add the plot to the graph
+$graph->Add($lineplot);
+
+// Display the graph
+$graph->Stroke($chartFileName);
+echo '<img src="' . $chartFileName . '">';
+?>
+
+<!-- PRESSURE CHART - HOURLY -->
+<h3>Today's Hourly Average Barometric Pressure</h3>
+
+<?php
+$chartFileName = 'chartPressureHourly.png';
+
+// Create the graph
+$graph = new Graph(1024,480,$chartFileName,100,$aInline=false);
+$graph->SetScale('intlin',0,0,0,23);
+$graph->SetMargin(55,10,10,50);
+
+// AXES
 $graph->xaxis->SetTitle('Time Of Day', 'middle');
-$graph->yaxis->SetTitle('Percent', 'middle');
-$graph->yaxis->SetTitleMargin(30);
+$graph->yaxis->SetTitle('Inches', 'middle');
+$graph->yaxis->SetTitleMargin(45);
+
+//Create the linear plot -- INDOOR
+$lineplot=new LinePlot($values['chartPressure-hourly']);
+$lineplot->SetColor('red');
+$lineplot->SetStyle('solid');
+
+// Add the plot to the graph
+$graph->Add($lineplot);
 
 // Display the graph
 $graph->Stroke($chartFileName);
@@ -126,4 +175,4 @@ echo '<img src="' . $chartFileName . '">';
 ?>
 
 <!-- some blank space at the bottom -->
-<br><br>
+<br><br><br>

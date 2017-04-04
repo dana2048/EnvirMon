@@ -39,6 +39,7 @@
 				<div class="navbar-collapse">
 					<ul class="nav navbar-nav navbar-left">
 						<li><a href="Index.php">Today</a>
+						<li><a href="day7.php">7-day</a>
 						<li><a href="Yesterday.php">Yesterday</a>
 						<li><a href="Monthly.php">This Month</a>
 						<li><a href="Other.php">Other</a>
