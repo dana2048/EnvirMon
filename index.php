@@ -17,7 +17,7 @@ $h4 = array(4);
 $sensor = array(1,5,4,6,3);
 $location = array('indoor DHT22', 'indoor AM2302', 'outdoor AM2302', 'crawl space');
 
-$timeVal  = mktime(0, 0, 0, date("m")  , date("d")-3, date("Y"));
+$timeVal  = mktime(0, 0, 0, date("m")  , date("d"), date("Y"));
 $today = date("Y-m-d", $timeVal);
 $qYear = date("Y", $timeVal);
 $qMonth = date("m", $timeVal);
@@ -86,7 +86,7 @@ $values['location'] = $location;
 //TEMPERATURE CHART INDOOR - HOURLY AVERAGE
 $t1 = array();
 $j = $sensor[$indoorSensIndex];
-for($i=0; $i<24; $i++)
+for($i=0; $i<25; $i++)
 {
 	$sql =
 		"SELECT AVG(temperature) AS avgTemp " .
@@ -109,7 +109,7 @@ $values['chartTemperatureIn-hourly'] = $t1;
 //TEMPERATURE CHART OUTDOOR - HOURLY AVERAGE
 $t1 = array();
 $j = $sensor[$outdoorSensIndex];
-for($i=0; $i<24; $i++)
+for($i=0; $i<25; $i++)
 {
 	$sql =
 		"SELECT AVG(temperature) AS avgTemp " .
@@ -132,7 +132,7 @@ $values['chartTemperatureOut-hourly'] = $t1;
 //TEMPERATURE CHART CRAWL SPACE - HOURLY AVERAGE
 $t1 = array();
 $j = $sensor[$crawlSensIndex];
-for($i=0; $i<24; $i++)
+for($i=0; $i<25; $i++)
 {
 	$sql =
 		"SELECT AVG(temperature) AS avgTemp " .
@@ -155,7 +155,7 @@ $values['chartTemperatureCrawl-hourly'] = $t1;
 //HUMIDITY CHART INDOOR - HOURLY AVERAGE
 $t1 = array();
 $j = $sensor[$indoorSensIndex];
-for($i=0; $i<24; $i++)
+for($i=0; $i<25; $i++)
 {
 	$sql =
 		"SELECT AVG(humidity) AS avgValue " .
@@ -178,7 +178,7 @@ $values['chartHumidityIn-hourly'] = $t1;
 //HUMIDITY CHART OUTDOOR - HOURLY AVERAGE
 $t1 = array();
 $j = $sensor[$outdoorSensIndex];
-for($i=0; $i<24; $i++)
+for($i=0; $i<25; $i++)
 {
 	$sql =
 		"SELECT AVG(humidity) AS avgValue " .
@@ -201,7 +201,7 @@ $values['chartHumidityOut-hourly'] = $t1;
 //HUMIDITY CHART CRAWL SPACE - HOURLY AVERAGE
 $t1 = array();
 $j = $sensor[$crawlSensIndex];
-for($i=0; $i<24; $i++)
+for($i=0; $i<25; $i++)
 {
 	$sql =
 		"SELECT AVG(humidity) AS avgValue " .
@@ -224,7 +224,7 @@ $values['chartHumidityCrawl-hourly'] = $t1;
 //PRESSURE CHART - HOURLY AVERAGE
 $t1 = array();
 $j = $sensor[$pressSensIndex];
-for($i=0; $i<24; $i++)
+for($i=0; $i<25; $i++)
 {
 	$sql =
 		"SELECT AVG(pressure) AS avgValue " .

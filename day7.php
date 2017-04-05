@@ -41,9 +41,9 @@ $outdoorSensIndex = 2;
 $crawlSensIndex = 3;
 $pressSensIndex = 4;
 
-$d4 = array(4);
-$t4 = array(4);
-$h4 = array(4);
+$d4 = array(0,0,0,0);
+$t4 = array(0,0,0,0);
+$h4 = array(0,0,0,0);
 $sensor = array(1,5,4,6,3);
 $location = array('indoor DHT22', 'indoor AM2302', 'outdoor AM2302', 'crawl space');
 
@@ -51,19 +51,12 @@ $numDays = 7;
 $numSamples = $numDays*24;
 
 $timeVal  = mktime(0, 0, 0, date("m")  , date("d")-1, date("Y"));
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-$timeVal  = mktime(0, 0, 0, date("m")  , date("d")-2, date("Y")); 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 $yesterday = date("Y-m-d", $timeVal);
 $qYear = date("Y", $timeVal);
 $qMonth = date("m", $timeVal);
 $qDay = date("d", $timeVal);
 
-//////////////////////////$startTime  = mktime(0, 0, 0, date("m")  , date("d")-$numDays, date("Y"));
-$startTime  = mktime(0, 0, 0, date("m")  , date("d")-14, date("Y"));
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-$startTime  = mktime(0, 0, 0, date("m")  , date("d")-18, date("Y"));
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+$startTime  = mktime(0, 0, 0, date("m")  , date("d")-7, date("Y"));
 //PrintR('$startTime', date("Y-m-d", $startTime));
 
 $ticTime = time();
@@ -86,30 +79,54 @@ function toc()
 tic(); //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 //###################################################
-//YESTERDAY AVERAGE TEMPERATURE AND HUMIDITY X 4
-for($i=0; $i<4; $i++)
+//7-day AVERAGE TEMPERATURE AND HUMIDITY X 4
+
+$numDays = 7;
+$timeVal  = mktime(0, 0, 0, date("m")  , date("d"), date("Y"));
+$today = date("Y-m-d", $timeVal);
+
+$oneDay = new DateInterval('P1D');
+$dateVal = new DateTime($today);
+
+for($iDay=0; $iDay<$numDays; $iDay++)
 {
-	$j = $sensor[$i];
-	$sql = 
-	"SELECT AVG(temperature) AS yesterdayTemp, AVG(humidity) AS yesterdayHumid " .
-//	"FROM data WHERE sensor=$j AND DATE(stamp)='" . $yesterday . "'";
-	"FROM data WHERE sensor=$j
-		AND year ='" . $qYear . "' 
-		AND month ='" . $qMonth . "' 
-		AND day ='" . $qDay . "'";
+	$dateVal->sub($oneDay);
+	//PrintR('$dateVal',$dateVal);
+	$yearVal  = $dateVal->format("Y");	//date("Y", $dateVal);
+	$monthVal = $dateVal->format("m");	//date("m", $dateVal);
+	$dayVal   = $dateVal->format("d");	//date("d", $dateVal);
 
-	$result = $db->query($sql);
-
-	while ( $row = $result->fetch_array(MYSQL_ASSOC) ) 
+	for($sensorIdx=0; $sensorIdx<4; $sensorIdx++)
 	{
-		$d = $yesterday;
-		$t = $row['yesterdayTemp'];
-		$h = $row['yesterdayHumid'];
-	}
+		$sensorID = $sensor[$sensorIdx];
+		$sql = 
+		"SELECT AVG(temperature) AS avgTemp, AVG(humidity) AS avgHumid " .
+		"FROM data WHERE sensor=$sensorID
+			AND year ='" . $yearVal . "' 
+			AND month ='" . $monthVal . "' 
+			AND day ='" . $dayVal . "'";
 
-	$d4[$i] = $d;
-	$t4[$i] = $t;
-	$h4[$i] = $h;
+		$result = $db->query($sql);
+
+		while ( $row = $result->fetch_array(MYSQL_ASSOC) ) 
+		{
+			$d = $dateVal->format("Y-m-d");
+			$t = $row['avgTemp'];
+			$h = $row['avgHumid'];
+		}
+
+		//summation
+		$d4[$sensorIdx] = $d;	//will end up with the beginning date of the $numDays period
+		$t4[$sensorIdx] += $t;
+		$h4[$sensorIdx] += $h;
+	}
+}
+
+for($sensorIdx=0; $sensorIdx<4; $sensorIdx++)
+{
+	//average
+	$t4[$sensorIdx] /= $numDays;
+	$h4[$sensorIdx] /= $numDays;
 }
 
 $values['yesterdayTimes'] = $d4;

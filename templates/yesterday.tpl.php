@@ -46,7 +46,7 @@ $chartFileName = 'chartTemperatureHourly.png';
 
 // Create the graph
 $graph = new Graph(1024,480,$chartFileName,100,$aInline=false);
-$graph->SetScale('intlin',0,0,0,23);
+$graph->SetScale('intlin',0,0,0,24);
 $graph->SetMargin(50,10,10,0);
 
 // LEGEND
@@ -100,7 +100,7 @@ $chartFileName = 'chartHumidityHourly.png';
 
 // Create the graph
 $graph = new Graph(1024,480,$chartFileName,100,$aInline=false);
-$graph->SetScale('intlin',0,0,0,23);
+$graph->SetScale('intlin',0,0,0,24);
 $graph->SetMargin(50,10,10,0);
 
 // LEGEND
@@ -154,7 +154,7 @@ $chartFileName = 'chartPressureHourly.png';
 
 // Create the graph
 $graph = new Graph(1024,480,$chartFileName,100,$aInline=false);
-$graph->SetScale('intlin',0,0,0,23);
+$graph->SetScale('intlin',0,0,0,24);
 $graph->SetMargin(55,10,10,50);
 
 // AXES

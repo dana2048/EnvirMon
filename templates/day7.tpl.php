@@ -214,7 +214,7 @@ $endTime = strtotime("+7 days", $startTime);	//seven days from startTime
 $graph = new Graph(1024,480,$chartFileName,100,$aInline=false);
 $yMin = min($values['pressure-hourly']['value']);
 $yMax = max($values['pressure-hourly']['value']);
-PrintR('$yMax',$yMax);
+//PrintR('$yMax',$yMax);
 $yMin = intval($yMin/0.25) * 0.25; //nearest 0.25 inches
 $yMax = intval($yMax/0.25) * 0.25 + 0.25; //nearest 0.25 inches
 $graph->SetScale('linint',$yMin,$yMax,$startTime,$endTime);

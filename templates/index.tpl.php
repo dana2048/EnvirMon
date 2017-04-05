@@ -45,7 +45,7 @@ $chartFileName = 'chartTemperatureHourly.png';
 // Create the graph
 $graph = new Graph(1024,480,$chartFileName,100,$aInline=false);
 //$graph->SetScale('textlin');
-$graph->SetScale('intlin',0,0,0,23);
+$graph->SetScale('intlin',0,0,0,24);
 $graph->SetMargin(50,10,10,0);
 //$graph->SetShadow();	//true,2,array(192,192,192));
 
@@ -61,6 +61,7 @@ $graph->yaxis->SetTitleMargin(30);
 
 //Create the linear plot -- INDOOR
 $lineplot=new LinePlot($values['chartTemperatureIn-hourly']);
+$lineplot->SetLineWeight(4);
 $lineplot->SetColor('red');
 $lineplot->SetStyle('solid');
 $lineplot->SetLegend('Indoor');
@@ -100,7 +101,7 @@ $chartFileName = 'chartHumidityHourly.png';
 
 // Create the graph
 $graph = new Graph(1024,480,$chartFileName,100,$aInline=false);
-$graph->SetScale('intlin',0,0,0,23);
+$graph->SetScale('intlin',0,0,0,24);
 $graph->SetMargin(50,10,10,0);
 
 // LEGEND
@@ -153,7 +154,7 @@ $chartFileName = 'chartPressureHourly.png';
 
 // Create the graph
 $graph = new Graph(1024,480,$chartFileName,100,$aInline=false);
-$graph->SetScale('intlin',0,0,0,23);
+$graph->SetScale('intlin',0,0,0,24);
 $graph->SetMargin(55,10,10,50);
 
 // AXES
@@ -163,6 +164,7 @@ $graph->yaxis->SetTitleMargin(45);
 
 //Create the linear plot -- INDOOR
 $lineplot=new LinePlot($values['chartPressure-hourly']);
+$lineplot->SetWeight(4);
 $lineplot->SetColor('red');
 $lineplot->SetStyle('solid');
 
