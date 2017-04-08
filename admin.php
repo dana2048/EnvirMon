@@ -1,6 +1,6 @@
 
 <?php
-
+try {
 // Database Access
 include 'includes/data.php';
 
@@ -23,5 +23,5 @@ $tpl->vars = array(
 
 // compile and print template
 $tpl->render();
-
+} catch(Exception $e){}
 ?>

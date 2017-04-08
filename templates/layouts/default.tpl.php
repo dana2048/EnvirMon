@@ -47,7 +47,7 @@
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="about.php">About</a>
 						<li><a href="contact.php">Contact</a></li>
-						<li><a href="admin.php">Admin</a></li>
+						<!-- li><a href="admin.php">Admin</a></li -->
 					</ul>
 				</div>
 			</div>

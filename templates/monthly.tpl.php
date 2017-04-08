@@ -4,9 +4,6 @@
 <?php
 require_once ('jpgraph/jpgraph.php');
 require_once ('jpgraph/jpgraph_line.php');
-
-
-
 ?>
 
 
@@ -14,6 +11,7 @@ require_once ('jpgraph/jpgraph_line.php');
 <h2>This Month's Average Daily Temperature</h2>
 
 <?php
+try{
 $chartFileName = 'chartMonthTemperature.png';
 
 // Create the graph
@@ -61,6 +59,7 @@ $graph->Add($lineplot);
 // Display the graph
 $graph->Stroke($chartFileName);
 echo '<img src="' . $chartFileName . '">';
+} catch(Exception $e){}
 ?>
 
 
@@ -68,6 +67,7 @@ echo '<img src="' . $chartFileName . '">';
 <h2>This Month's Average Daily Humidity</h2>
 
 <?php
+try{
 $chartFileName = 'chartHumidity.png';
 
 // Create the graph
@@ -115,6 +115,7 @@ $graph->Add($lineplot);
 // Display the graph
 $graph->Stroke($chartFileName);
 echo '<img src="' . $chartFileName . '">';
+} catch(Exception $e){}
 ?>
 
 
@@ -122,6 +123,7 @@ echo '<img src="' . $chartFileName . '">';
 <h2>This Month's Average Daily Pressure</h2>
 
 <?php
+try{
 $chartFileName = 'chartPressure.png';
 
 // Create the graph
@@ -145,6 +147,7 @@ $graph->Add($lineplot);
 // Display the graph
 $graph->Stroke($chartFileName);
 echo '<img src="' . $chartFileName . '">';
+} catch(Exception $e){}
 ?>
 
 <!-- some blank space at the bottom -->

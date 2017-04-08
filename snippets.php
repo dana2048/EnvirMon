@@ -1,4 +1,17 @@
 
+//###################################################
+function PrintR($title, $variable)
+{
+	echo "<br>";
+	echo $title;
+	echo '-- ';
+	print_r($variable); 
+	echo "<br>";
+	echo "<br>";
+}
+
+
+//###################################################
 //	echo '<pre>';
 /*
 	echo 'print_r($row)'; echo "<br>";

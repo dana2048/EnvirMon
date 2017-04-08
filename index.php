@@ -40,6 +40,16 @@ function toc()
 	echo "<br>";
 }
 
+function PrintR($title, $variable)
+{
+	echo "<br>";
+	echo $title;
+	echo '-- ';
+	print_r($variable); 
+	echo "<br>";
+	echo "<br>";
+}
+
 tic(); //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 //###################################################
@@ -62,7 +72,10 @@ for($i=0; $i<4; $i++)
 
 	$result = $db->query($sql);
 
+	$d = 0;
 	$t = array();
+	$h = array();
+
 	//get the last value
 	while ( $row = $result->fetch_array(MYSQL_ASSOC) ) 
 	{

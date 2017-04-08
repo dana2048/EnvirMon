@@ -28,8 +28,8 @@ require_once ('jpgraph/jpgraph_line.php');
 			echo('<tr>');
 			echo('<td>' . $values['yesterdayTimes'][$i] . '</td>');
 			echo('<td>' . $values['location'][$i] . '</td>');
-			echo('<td>' . number_format($values['yesterdayTemps'][$i],1) . '</td>');
-			echo('<td>' . number_format($values['yesterdayHumids'][$i],1) . '</td>');
+			echo('<td>' . number_format(floatval($values['yesterdayTemps'][$i]),1) . '</td>');
+			echo('<td>' . number_format(floatval($values['yesterdayHumids'][$i]),1) . '</td>');
 			echo('</tr>');
 			//$i=2; //outdoor
 		}
@@ -42,6 +42,7 @@ require_once ('jpgraph/jpgraph_line.php');
 <h3>Yesterday's Hourly Average Temperature</h3>
 
 <?php
+try{
 $chartFileName = 'chartTemperatureHourly.png';
 
 // Create the graph
@@ -89,6 +90,7 @@ $graph->Add($lineplot);
 // Display the graph
 $graph->Stroke($chartFileName);
 echo '<img src="' . $chartFileName . '">';
+} catch(Exception $e){}
 ?>
 
 
@@ -96,6 +98,7 @@ echo '<img src="' . $chartFileName . '">';
 <h3>Yesterday's Hourly Average Humidity</h3>
 
 <?php
+try{
 $chartFileName = 'chartHumidityHourly.png';
 
 // Create the graph
@@ -143,6 +146,7 @@ $graph->Add($lineplot);
 // Display the graph
 $graph->Stroke($chartFileName);
 echo '<img src="' . $chartFileName . '">';
+} catch(Exception $e){}
 ?>
 
 
@@ -150,6 +154,7 @@ echo '<img src="' . $chartFileName . '">';
 <h3>Yesterday's Hourly Average Pressure</h3>
 
 <?php
+try{
 $chartFileName = 'chartPressureHourly.png';
 
 // Create the graph
@@ -173,6 +178,7 @@ $graph->Add($lineplot);
 // Display the graph
 $graph->Stroke($chartFileName);
 echo '<img src="' . $chartFileName . '">';
+} catch(Exception $e){}
 ?>
 
 <!-- some blank space at the bottom -->

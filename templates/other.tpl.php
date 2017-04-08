@@ -12,6 +12,7 @@ require_once ('jpgraph/jpgraph_line.php');
 <h3>Yesterday's Temperature Chart x 4</h3>
 
 <?php
+try {
 $chartFileName = 'chartTemperature4.png';
 
 // Create the graph. These two calls are always required
@@ -35,4 +36,5 @@ for($i=0; $i<4; $i++)
 // Display the graph
 $graph->Stroke($chartFileName);
 echo '<img src="' . $chartFileName . '">';
+} catch(Exception $e){}
 ?>

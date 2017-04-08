@@ -6,6 +6,10 @@ A .NET application collects information from an Arduino over a serial connection
 
 Webpages written in PHP access the mySQL database and display the information in various forms.
 
+Graphs are plotted using JpGraph
+//jpgraph.net
+
+
 #### UNDER DEVELOPMENT ####
 
-## 2015-11-25
+## 2017-04-08

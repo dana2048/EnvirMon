@@ -33,8 +33,8 @@ function timeFormat($time)
 			echo('<tr>');
 			echo('<td>' . $values['yesterdayTimes'][$i] . '</td>');
 			echo('<td>' . $values['location'][$i] . '</td>');
-			echo('<td>' . number_format($values['yesterdayTemps'][$i],1) . '</td>');
-			echo('<td>' . number_format($values['yesterdayHumids'][$i],1) . '</td>');
+			echo('<td>' . number_format(floatval($values['yesterdayTemps'][$i]),1) . '</td>');
+			echo('<td>' . number_format(floatval($values['yesterdayHumids'][$i]),1) . '</td>');
 			echo('</tr>');
 			//$i=2; //outdoor
 		}
@@ -47,6 +47,7 @@ function timeFormat($time)
 <h3>7-day Hourly Average Temperature</h3>
 
 <?php
+try{
 $chartFileName = 'chartTemperatureHourly.png';
 
 $startTime = $values['temperatureIn-hourly']['time'][0];	//UNIX timestamp
@@ -119,6 +120,7 @@ $graph->Add($lineplot);
 // Display the graph
 $graph->Stroke($chartFileName);
 echo '<img src="' . $chartFileName . '">';
+} catch(Exception $e){}
 ?>
 
 
@@ -126,6 +128,7 @@ echo '<img src="' . $chartFileName . '">';
 <h3>7-day Hourly Average Humidity</h3>
 
 <?php
+try{
 $chartFileName = 'chartHumidityHourly.png';
 
 $startTime = $values['humidityIn-hourly']['time'][0];	//UNIX timestamp
@@ -196,6 +199,7 @@ $graph->Add($lineplot);
 // Display the graph
 $graph->Stroke($chartFileName);
 echo '<img src="' . $chartFileName . '">';
+} catch(Exception $e){}
 ?>
 
 
@@ -203,6 +207,7 @@ echo '<img src="' . $chartFileName . '">';
 <h3>7-day Hourly Average Pressure</h3>
 
 <?php
+try{
 $chartFileName = 'chartPressureHourly.png';
 
 $startTime = $values['pressure-hourly']['time'][0];	//UNIX timestamp
@@ -252,6 +257,7 @@ $graph->Add($lineplot);
 // Display the graph
 $graph->Stroke($chartFileName);
 echo '<img src="' . $chartFileName . '">';
+} catch(Exception $e){}
 ?>
 
 <!-- some blank space at the bottom -->
