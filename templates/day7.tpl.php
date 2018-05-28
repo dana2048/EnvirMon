@@ -74,7 +74,7 @@ $graph->legend->SetFont(FF_ARIAL, FS_NORMAL, 10);
 $totalTime = $endTime - $startTime;	//number of seconds in 7 days
 $totalTime = 7*24*60*60; 
 $tickTime = $totalTime/7;	//tick every day
-$tickTime = 24*60*60;
+$tickTime = 24*60*60;       //number of seconds in one day
 //PrintR('$totalTime', $totalTime);
 //PrintR('$tickTime', $tickTime);
 $graph->xaxis->scale->ticks->Set($tickTime); //set major tick step one per day

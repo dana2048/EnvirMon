@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title>
-			<?php /* if a $page_title variable is set, include it it the title tag */ ?>
+			<?php /* if a $page_title variable is set, include it in the title tag */ ?>
 			<?php if ( isset($page_title) ): ?>
 				<?php echo $page_title . ' | '; ?>
 			<?php endif; ?>

@@ -1,99 +1,80 @@
 
-<!--- EnviroMon Index Page --->
+<!--- EnviroMon Monthly Page --->
 
 <?php
 
-require 'includes/db.php';	//database access
-require 'includes/template.php';	//template handler
-
-$indoorSensIndex = 1;
-$outdoorSensIndex = 2;
-$crawlSensIndex = 3;
-$pressSensIndex = 4;
+require 'includes/db.php';          //database access
+require 'includes/template.php';    //template handler
+require 'includes/tictoc.php';      //timing functions
+require 'includes/sensors.php';     //provides $sensorT, $locationT, $sensorH, $locationH, $sensorP, $locationP
 
 $d4 = array(4);
 $t4 = array(4);
 $h4 = array(4);
-$sensor = array(1,5,4,6,3);
-$location = array('indoor DHT22', 'indoor AM2302', 'outdoor AM2302', 'crawl space');
 
 $timeVal  = mktime(0, 0, 0, date("m")  , date("d"), date("Y"));
 $thisMonth = date("m", $timeVal);
 $thisYear = date("Y", $timeVal);
 $daysInMonth = intval(date('t'));
 
-$ticTime = time();
-function tic()
-{
-	global $ticTime;
-	$ticTime = time();
-	echo "<br>tic";
-}
-
-function toc()
-{
-	global $ticTime;
-	$tocTime = time();
-	echo "<br>toc ";
-	echo $tocTime-$ticTime;
-	echo "<br>";
-}
-
 tic(); //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 //###################################################
-//TEMPERATURE CHART INDOOR - ONE MONTH DAILY AVERAGE
+//TEMPERATURE CHART - ONE MONTH DAILY AVERAGE
 function DailyAverage($db, $sens, $year_, $month_, $numDays, $fieldName)
 {
-	$t1 = array();
-	for($i=0; $i<$numDays; $i++)
-	{
-		$sql = 
-			"SELECT AVG($fieldName) AS avgValue " .
-			"FROM data WHERE sensor=$sens 
-				AND year ='" . $year_ . "' 
-				AND month ='" . $month_ . "' 
-				AND day ='" . (string)($i+1) . "'";
+    $t1 = array();
+    for($i=0; $i<$numDays; $i++)
+    {
+            $sql = 
+                    "SELECT AVG($fieldName) AS avgValue " .
+                    "FROM data WHERE sensor=$sens 
+                            AND year ='" . $year_ . "' 
+                            AND month ='" . $month_ . "' 
+                            AND day ='" . (string)($i+1) . "'";
 
-		$result = $db->query($sql);
-		$value = $result->fetch_array(MYSQL_ASSOC);
-		$t1[] = $value['avgValue'];
-	}
+            $result = $db->query($sql);
+            $value = $result->fetch_array(MYSQL_ASSOC);
+            $t1[] = $value['avgValue'];
+    }
 
-return $t1;
+    return $t1;
 }
 
-$values['temperatureMonth-in'] = DailyAverage($db, $sensor[$indoorSensIndex], $thisYear, $thisMonth, $daysInMonth, 'temperature');
+//###########################################
+//TEMPERATURE CHART - ONE MONTH DAILY AVERAGE
+$tN = [];
+for($sensorN=0; $sensorN<count($sensorT); $sensorN++)
+{
+    $tN[] = DailyAverage($db, $sensorT[$sensorN], $thisYear, $thisMonth, $daysInMonth, 'temperature');
+}
+
+$values['temperatureMonth'] = $tN; //pass to the template
+$values['locationT'] = $locationT;
 
 
-//###################################################
-//TEMPERATURE CHART OUTDOOR - ONE MONTH DAILY AVERAGE
-$values['temperatureMonth-out'] = DailyAverage($db, $sensor[$outdoorSensIndex], $thisYear, $thisMonth, $daysInMonth, 'temperature');
+//#########################################
+//HUMIDITY CHART  - ONE MONTH DAILY AVERAGE
+$hN = [];
+for($sensorN=0; $sensorN<count($sensorH); $sensorN++)
+{
+    $hN[] = DailyAverage($db, $sensorH[$sensorN], $thisYear, $thisMonth, $daysInMonth, 'humidity');
+}
+
+$values['humidityMonth'] = $hN; //pass to the template
+$values['locationH'] = $locationH;
 
 
-//###################################################
-//TEMPERATURE CHART CRAWL - ONE MONTH DAILY AVERAGE
-$values['temperatureMonth-crawl'] = DailyAverage($db, $sensor[$crawlSensIndex], $thisYear, $thisMonth, $daysInMonth, 'temperature');
-
-
-//###################################################
-//HUMIDITY CHART INDOOR - ONE MONTH DAILY AVERAGE
-$values['humidityMonth-in'] = DailyAverage($db, $sensor[$indoorSensIndex], $thisYear, $thisMonth, $daysInMonth, 'humidity');
-
-
-//###################################################
-//HUMIDITY CHART OUTDOOR - ONE MONTH DAILY AVERAGE
-$values['humidityMonth-out'] = DailyAverage($db, $sensor[$outdoorSensIndex], $thisYear, $thisMonth, $daysInMonth, 'humidity');
-
-
-//###################################################
-//HUMIDITY CHART CRAWL - ONE MONTH DAILY AVERAGE
-$values['humidityMonth-crawl'] = DailyAverage($db, $sensor[$crawlSensIndex], $thisYear, $thisMonth, $daysInMonth, 'humidity');
-
-
-//###################################################
+//########################################
 //PRESSURE CHART - ONE MONTH DAILY AVERAGE
-$values['pressureMonth'] = DailyAverage($db, $sensor[$pressSensIndex], $thisYear, $thisMonth, $daysInMonth, 'pressure');
+$pN = [];
+for($sensorN=0; $sensorN<count($sensorP); $sensorN++)
+{
+    $pN[] = DailyAverage($db, $sensorP[$sensorN], $thisYear, $thisMonth, $daysInMonth, 'pressure');
+}
+
+$values['pressureMonth'] = $pN; //pass to the template
+$values['locationP'] = $locationP;
 
 
 //###################################################
